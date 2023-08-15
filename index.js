@@ -9,6 +9,7 @@ connectMongo()
 app.use('/api/item',require('./routes/item'))
 app.use('/api/order',require('./routes/order'))
 app.use('/api/feedback',require('./routes/feedback'))
+app.use('/api/auth',require('./routes/auth'))
 app.get('/',(req,res)=>{
     res.send('server working')
 })
