@@ -1,5 +1,6 @@
 const express = require ('express');
 const Order = require('../models/Order');
+const middleware = require('../middleware/middleware');
 const router = express.Router()
 
 
@@ -21,14 +22,22 @@ router.get('/:id',async(req,res)=>{
     }
 })
 
-router.post('/',async(req,res)=>{
+router.post('/',middleware,async(req,res)=>{
     try {
+        if(req.status==="offline"){
+            res.send("restraunt offline").status(200)
+        }else{
         const {cart,name, address, upi, email, phone} = req.body
         const customer = {name, address, upi, email, phone}
+        if(cart.length===0){
+            res.send("cart empty").status(200)
+        }else{
         const order = await Order.create({
             cart: cart,customer:customer
         })
         res.json({success:true,order:order})
+    }
+    }
     } catch (error) {
         res.json({success:false,error:error})
     }

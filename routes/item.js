@@ -1,29 +1,30 @@
 const express = require ('express')
-const Item = require('../models/Item')
+const Item = require('../models/Item');
+const middleware = require('../middleware/middleware');
 const router = express.Router()
 
-router.get('/all',async(req,res)=>{
+router.get('/all',middleware,async(req,res)=>{
     try {
         const items = await Item.find();
-        res.json({success:true,items:items,total:items.length})
+        res.json({success:true,items:items,total:items.length,status:req.status})
     } catch (error) {
         res.json({success:false,error:error})
     }
 })
 
-router.get('/',async(req,res)=>{
+router.get('/',middleware,async(req,res)=>{
     try {
         const items = await Item.find({stock:"true"});
-        res.json({success:true,items:items,total:items.length})
+        res.json({success:true,items:items,total:items.length,status:req.status})
     } catch (error) {
         res.json({success:false,error:error})
     }
 })
 
-router.get('/:id',async(req,res)=>{
+router.get('/:id',middleware,async(req,res)=>{
     try {
         const item = await Item.findById(req.params.id)
-        res.json({success:true,item:item})
+        res.json({success:true,item:item,status:req.status})
     } catch (error) {
         res.json({success:false,error:error})
     }
@@ -41,17 +42,6 @@ router.post('/',async(req,res)=>{
     }
 })
 
-router.post('/',async(req,res)=>{
-    try {
-        const {title,description,price,stock,img} = req.body
-        const item = await Item.create({
-            title,description,price,stock,img
-        })
-        res.json({success:true,item:item})
-    } catch (error) {
-        res.json({success:false,error:error})
-    }
-})
 
 router.put('/:id',async(req,res)=>{
     try {
