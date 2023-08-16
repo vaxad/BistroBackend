@@ -27,13 +27,13 @@ router.post('/',middleware,async(req,res)=>{
         if(req.status==="offline"){
             res.send("restraunt offline").status(200)
         }else{
-        const {cart,name, address, upi, email, phone} = req.body
+        const {cart,name, address, upi, email, phone, date} = req.body
         const customer = {name, address, upi, email, phone}
         if(cart.length===0){
             res.send("cart empty").status(200)
         }else{
         const order = await Order.create({
-            cart: cart,customer:customer
+            cart: cart,customer:customer,date:date
         })
         res.json({success:true,order:order})
     }
